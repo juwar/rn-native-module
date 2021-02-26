@@ -8,13 +8,17 @@ import java.util.Map;
 import java.util.HashMap;
 import android.util.Log;
 //Callback
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.Callback;
 //Sending Event
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 //Test
-import java.text.SimpleDateFormat;  
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CalendarModule extends ReactContextBaseJavaModule {
@@ -40,16 +44,27 @@ public class CalendarModule extends ReactContextBaseJavaModule {
     }
 
     
-    // private void sendEvent(ReactContext reactContext,
-    //                 String eventName,
-    //                 @Nullable WritableMap params) {
-    //     reactContext
-    //         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-    //         .emit(eventName, params);
-    //     }
-    //     SWritableMap params = Arguments.createMap();
-    //     params.putString("test", ">> Event in Native");
-        
-    //     sendEvent(reactContext, "EventReminder", params);
+    private void sendEvent(ReactContext reactContext,
+                    String eventName,
+                    @Nullable String params) {
+        reactContext
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit(eventName, params);
+        }
+
+    // Native -> React
+
+    /**
+     * Native menggunakan ini untuk mengirim event ke RN
+     */
+    private void sendToReact(String eventName, JSONObject messageJson) {
+        sendEvent(this.getReactApplicationContext(), eventName, serializeMessage(messageJson));
+    }
+
+    //JSON Helpers
+    private String serializeMessage(JSONObject jsonObject) {
+        return jsonObject.toString();
+    }
+
 
 }
