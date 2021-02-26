@@ -15,30 +15,34 @@ import {
     Text,
     StatusBar,
     Button,
-    NativeModule,
-    Alert,
-    AppState
 } from 'react-native';
-import { createCalendarEvent } from './modules'
+import { createCalendarEvent, eventEmitter } from './modules'
 
+const eventFromNative = eventEmitter();
 
 const onPress = () => {
     console.log("Pressed")
     createCalendarEvent('testName', 'testLocation');
 };
 
-// const handleAppStateChange = (val) => {
-//     console.log(val?.test)
-// }
- 
-// useEffect(() => {
-//     AppState.addEventListener('EventReminder', (event) => { handleAppStateChange(event) });
-//     return (() => {
-//         AppState.removeEventListener('EventReminder');
-//     })
-// }, []);
+const handleAppStateChange = (val) => {
+    const obj = JSON.parse(val)
+    console.log(obj.name)
+}
+
 
 const Home = () => {
+
+    useEffect(() => {
+        eventFromNative.addListener('Test', (event) => { handleAppStateChange(event) });
+
+        // cleanup this component
+        return () => {
+            eventFromNative.removeListener('Test', (event) => { handleAppStateChange(event) });
+        };
+    }, []);
+
+
     return (
         <View style={styles.baseText}>
             <Button

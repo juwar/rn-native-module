@@ -7,6 +7,6 @@ export const createCalendarEvent = (testName, testLocation) => {
   });
 }
 
-// export const eventEmitter = () => {
-//     return new NativeEventEmitter(NativeModules.CalendarModule);
-// }
+export const eventEmitter = () => {
+  return new NativeEventEmitter(NativeModules.CalendarModule);
+}

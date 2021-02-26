@@ -17,6 +17,10 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 //Test
 import org.json.JSONObject;
+import java.lang.Object;
+import java.lang.Throwable;
+import java.lang.Exception;
+import org.json.JSONException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,8 +43,21 @@ public class CalendarModule extends ReactContextBaseJavaModule {
         // Log.d("CalendarModule", "Create event called with name: " + name
         // + " and location: " + location);
 
-        callBack.invoke(">> Callback in Native at " + formatter.format(date) + ", name: " + name
-        + " and location: " + location);
+        // callBack.invoke(">> Callback in Native at " + formatter.format(date) + ", name: " + name
+        // + " and location: " + location);
+
+
+        //Start Test Trigger
+        try {
+            JSONObject obj = new JSONObject("{\"name\":Juju}");  
+            sendToReact("Test", obj);
+            callBack.invoke(">> Callback in Native at " + formatter.format(date) + ", name: " + name
+            + " and location: " + location);
+        } catch (JSONException e) {
+            //some exception handler code.
+            callBack.invoke(">> Error");
+        }
+        //End Test Trigger
     }
 
     
