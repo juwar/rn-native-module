@@ -16,13 +16,16 @@ import {
     StatusBar,
     Button,
 } from 'react-native';
+// import { createCalendarEvent, eventEmitter } from './androidModules'
 import { createCalendarEvent, eventEmitter } from './modules'
 
 const eventFromNative = eventEmitter();
 
 const onPress = () => {
     console.log("Pressed")
-    createCalendarEvent('testName', 'testLocation');
+    createCalendarEvent('testNameIos', 'testLocationIos');
+    //Cek
+    console.log(eventFromNative)
 };
 
 const handleAppStateChange = (val) => {
@@ -30,18 +33,16 @@ const handleAppStateChange = (val) => {
     console.log(obj.name)
 }
 
-
 const Home = () => {
 
-    useEffect(() => {
-        eventFromNative.addListener('Test', (event) => { handleAppStateChange(event) });
+    // useEffect(() => {
+    //     eventFromNative.addListener('Test', (event) => { handleAppStateChange(event) });
 
-        // cleanup this component
-        return () => {
-            eventFromNative.removeListener('Test', (event) => { handleAppStateChange(event) });
-        };
-    }, []);
-
+    //     // cleanup this component
+    //     return () => {
+    //         eventFromNative.removeListener('Test', (event) => { handleAppStateChange(event) });
+    //     };
+    // }, []);
 
     return (
         <View style={styles.baseText}>
