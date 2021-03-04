@@ -35,14 +35,14 @@ const handleAppStateChange = (val) => {
 
 const Home = () => {
 
-    // useEffect(() => {
-    //     eventFromNative.addListener('Test', (event) => { handleAppStateChange(event) });
+    useEffect(() => {
+        eventFromNative.addListener('Test', (event) => { handleAppStateChange(event) });
 
-    //     // cleanup this component
-    //     return () => {
-    //         eventFromNative.removeListener('Test', (event) => { handleAppStateChange(event) });
-    //     };
-    // }, []);
+        // cleanup this component
+        return () => {
+            eventFromNative.removeListener('Test', (event) => { handleAppStateChange(event) });
+        };
+    }, []);
 
     return (
         <View style={styles.baseText}>
