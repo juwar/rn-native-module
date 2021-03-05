@@ -15,14 +15,17 @@ import {
     Text,
     StatusBar,
     Button,
+    NativeModules
 } from 'react-native';
-import { createCalendarEvent, eventEmitter } from './modules'
+import { sendEventToNative, eventEmitter } from './modules'
+// import { createCalendarEvent, eventEmitter } from './modules'
 
 const eventFromNative = eventEmitter();
 
 const onPress = () => {
     console.log("Pressed")
-    createCalendarEvent('testName', 'testLocation');
+    sendEventToNative("hello")
+    //createCalendarEvent('testName', 'testLocation');
 };
 
 const handleAppStateChange = (val) => {
@@ -30,15 +33,13 @@ const handleAppStateChange = (val) => {
     console.log(obj.name)
 }
 
-
 const Home = () => {
-
     useEffect(() => {
-        eventFromNative.addListener('Test', (event) => { handleAppStateChange(event) });
+        eventFromNative.addListener('EventCheckConnection', (event) => { handleAppStateChange(event) });
 
         // cleanup this component
         return () => {
-            eventFromNative.removeListener('Test', (event) => { handleAppStateChange(event) });
+            eventFromNative.removeListener('EventCheckConnection', (event) => { handleAppStateChange(event) });
         };
     }, []);
 
