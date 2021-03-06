@@ -29,8 +29,7 @@ const onPress = () => {
 };
 
 const handleAppStateChange = (val) => {
-    const obj = JSON.parse(val)
-    console.log(obj.name)
+    console.log(val)
 }
 
 const Home = () => {
