@@ -15,6 +15,7 @@ enum RCTSupportedEvent: String, CaseIterable {
 @objc(ConnectNativeModule)
 class ConnectNativeModule: RCTEventEmitter {
   
+  var hasListener: Bool = false
   public static var shared: ConnectNativeModule?
   
   override init() {
@@ -31,7 +32,9 @@ class ConnectNativeModule: RCTEventEmitter {
   }
   
   func sendEventToReact(withName event: RCTSupportedEvent, body: [String: Any] = [:]) {
-    sendEvent(withName: event.rawValue, body: body)
+    if hasListener {
+      sendEvent(withName: event.rawValue, body: body)
+    }
   }
   
   @objc func sendCallbackToNative(_ type: String, callback rnCallback: RCTResponseSenderBlock?) {
@@ -40,5 +43,13 @@ class ConnectNativeModule: RCTEventEmitter {
   
   @objc func sendMessageToNative(_ rnMessage: String) {
     print("This log is from RN: \(rnMessage)")
+  }
+  
+  override func startObserving() {
+    hasListener = true
+  }
+  
+  override func stopObserving() {
+    hasListener = false
   }
 }

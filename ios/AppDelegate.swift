@@ -52,7 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.bridge = rootView.bridge
     if let eventEmitter = rootView.bridge.module(for: ConnectNativeModule.self) as? ConnectNativeModule {
       ConnectNativeModule.shared = eventEmitter
-      eventEmitter.sendEventToReact(withName: .checkConnection, body: ["test": "param"])
+      DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        eventEmitter.sendEventToReact(withName: .checkConnection, body: ["test": "param"])
+      }
     }
     
     self.window = UIWindow(frame: UIScreen.main.bounds)
