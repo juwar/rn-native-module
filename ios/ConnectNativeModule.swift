@@ -18,8 +18,8 @@ class ConnectNativeModule: RCTEventEmitter {
   public static var shared: ConnectNativeModule?
   
   override init() {
-      super.init()
-      ConnectNativeModule.shared = self
+    super.init()
+    ConnectNativeModule.shared = self
   }
   
   override class func requiresMainQueueSetup() -> Bool {

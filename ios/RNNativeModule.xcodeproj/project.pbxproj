@@ -108,8 +108,8 @@
 		006815C525F122A600855266 /* RCTModules */ = {
 			isa = PBXGroup;
 			children = (
-				006815C625F122D700855266 /* ReactNativeConnection.m */,
 				006815D125F1236400855266 /* ConnectNativeModule.swift */,
+				006815C625F122D700855266 /* ReactNativeConnection.m */,
 				006815D025F1236100855266 /* RNNativeModule-Bridging-Header.h */,
 			);
 			name = RCTModules;
