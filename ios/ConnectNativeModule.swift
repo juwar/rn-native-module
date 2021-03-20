@@ -9,7 +9,7 @@ import Foundation
 import React
 
 enum RCTSupportedEvent: String, CaseIterable {
-    case checkConnection = "EventCheckConnection"
+    case alarm = "EventAlarm"
 }
 
 @objc(ConnectNativeModule)

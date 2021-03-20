@@ -7,6 +7,7 @@
 
 import UIKit
 import Foundation
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -53,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     if let eventEmitter = rootView.bridge.module(for: ConnectNativeModule.self) as? ConnectNativeModule {
       ConnectNativeModule.shared = eventEmitter
       DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-        eventEmitter.sendEventToReact(withName: .checkConnection, body: ["test": "param"])
+        eventEmitter.sendEventToReact(withName: .alarm, body: ["test": "param"])
       }
     }
     
@@ -65,11 +66,59 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window!.rootViewController = rootViewController;
     self.window!.makeKeyAndVisible()
     
+    UNUserNotificationCenter.current().delegate = self
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] success, error in
+      if success {
+        self?.createLocalNotification("Pill 1", title: "Pill 1", body: "Minum Pill1", hour: 14, minute: 18)
+        self?.createLocalNotification("Pill 2", title: "Pill 2", body: "Minum Pill2", hour: 14, minute: 20)
+      } else if let error = error {
+        print("\(error.localizedDescription)")
+      }
+    }
+    
     return true
+  }
+  
+  private func createLocalNotification(_ id: String, title: String, body: String, hour: Int? = nil, minute: Int? = nil) {
+    let content = UNMutableNotificationContent()
+    content.title = title
+    content.body = body
+    content.sound = .default
+    
+    var dateComponent = DateComponents()
+    dateComponent.calendar = .current
+    if let hour = hour {
+      dateComponent.hour = hour
+    }
+    if let minute = minute {
+      dateComponent.minute = minute
+    }
+    
+    //let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: true)
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: true)
+    let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+    let notificationCenter = UNUserNotificationCenter.current()
+    notificationCenter.add(request) { error in
+      if let error = error {
+        print("error \(error.localizedDescription)")
+      } else {
+        print("success")
+      }
+    }
   }
 }
 
-
+extension AppDelegate: UNUserNotificationCenterDelegate {
+  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    print("Identifier : \(response.notification.request.identifier)")
+    print("Request: \(response.notification.request)")
+  }
+  
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    print("Identifier : \(notification.request.identifier)")
+    print("Request: \(notification.request)")
+  }
+}
 
 #if FB_SONARKIT_ENABLED
 func initializeFlipper(_ application: UIApplication) {
